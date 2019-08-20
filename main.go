@@ -6,18 +6,19 @@ import (
 )
 
 func main() {
-	iArr := []int{-6, -3, -2, -1, 0, 1, 3, 4, 5, 7, 8, 9, 10, 11, 14, 15, 17, 18, 19, 20}
-	//iArr := []int{1, 4, 6, 7, 8, 10, 12, 13, 18, 19, 20, 100, 101, 7, 19, 20, 21, 1, 2, 3, 4, 5, 6}
-	Solution(iArr)
+
+	Solution([]int{-3, -2, 0, 3, 4, 5})
+	Solution([]int{-6, -3, -2, -1, 0, 1, 3, 4, 5, 7, 8, 9, 10, 11, 14, 15, 17, 18, 19, 20})
+	Solution([]int{1, 4, 6, 7, 8, 10, 12, 13, 18, 19, 20, 100, 101, 7, 19, 20, 21, 1, 2, 3, 4, 5, 6})
 }
 
 func Solution(iArr []int) string {
-	knownrangeidxs := []int{} // index positions in iArr that are part of a known range group
+	knownRangeIdxs := []int{} // index positions in iArr that are part of a known range group
 	rangeStartIdxs := []int{}
 	rangeEndIdxs := []int{}
 	resultString := ""
 
-	//First Pass : Find all the ranges in the array
+	// First Pass : Find all the ranges in the array
 	seriesCnt := 1
 	for x := 1; x < len(iArr); x++ {
 		endOfARange := false // reset
@@ -34,19 +35,13 @@ func Solution(iArr []int) string {
 				}
 
 				if endOfARange {
-					//fmt.Printf("End of series found at x=%d\n", x)
 					startOfRange := x - seriesCnt + 1
 					endOfRange := startOfRange + seriesCnt - 1
 					rangeStartIdxs = append(rangeStartIdxs, startOfRange)
 					rangeEndIdxs = append(rangeEndIdxs, endOfRange)
 
-					//rangesMap[x-seriesCnt][seriesCnt]
-					fmt.Printf("Range Found :  start:%d  end:%d  count:%d\n", startOfRange, endOfRange, seriesCnt)
-					// now we can save the idx's that are part of a known range
-
 					for y := startOfRange; y <= endOfRange; y++ {
-						knownrangeidxs = append(knownrangeidxs, y)
-						fmt.Println(y)
+						knownRangeIdxs = append(knownRangeIdxs, y)
 					}
 
 					seriesCnt = 1 // reset
@@ -57,12 +52,9 @@ func Solution(iArr []int) string {
 		}
 	}
 
-	fmt.Println("known range idx's :")
-	fmt.Printf("%v\n", knownrangeidxs)
-
-	// Print the result :
+	// This loop builds the string
 	for x := 0; x < len(iArr); x++ {
-		if contains(knownrangeidxs, x) == false {
+		if contains(knownRangeIdxs, x) == false {
 			resultString += strconv.Itoa(iArr[x])
 			if x < len(iArr)-1 {
 				resultString += ","
@@ -79,8 +71,6 @@ func Solution(iArr []int) string {
 				if x < len(iArr)-1 {
 					resultString += ","
 				}
-			} else {
-				// do nothing if end between
 			}
 		}
 
@@ -88,7 +78,6 @@ func Solution(iArr []int) string {
 
 	fmt.Println("Result : " + resultString)
 	return resultString
-
 }
 
 func contains(s []int, e int) bool {
