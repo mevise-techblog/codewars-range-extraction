@@ -1,13 +1,17 @@
-5package main
+package main
 
 import (
 	"fmt"
+	"strconv"
 )
 
 func main() {
 	iArr := []int{1, 4, 6, 7, 8, 10, 12, 13, 18, 19, 20, 100, 101, 7, 19, 20, 21, 1, 2, 3, 4, 5, 6}
 	knownrangeidxs := []int{} // index positions in iArr that are part of a known range group
-	
+	rangeStartIdxs := []int{}
+	rangeEndIdxs := []int{}
+	resultString := ""
+
 	//First Pass : Find all the ranges in the array
 	seriesCnt := 1
 	for x := 1; x < len(iArr); x++ {
@@ -27,15 +31,17 @@ func main() {
 				if endOfARange {
 					//fmt.Printf("End of series found at x=%d\n", x)
 					startOfRange := x - seriesCnt + 1
-					endOfRange := x
+					endOfRange := startOfRange + seriesCnt - 1
+					rangeStartIdxs = append(rangeStartIdxs, startOfRange)
+					rangeEndIdxs = append(rangeEndIdxs, endOfRange)
 
 					//rangesMap[x-seriesCnt][seriesCnt]
 					fmt.Printf("Range Found :  start:%d  end:%d  count:%d\n", startOfRange, endOfRange, seriesCnt)
 					// now we can save the idx's that are part of a known range
 
 					for y := startOfRange; y <= endOfRange; y++ {
-						fmt.Println(y)
 						knownrangeidxs = append(knownrangeidxs, y)
+						fmt.Println(y)
 					}
 
 					seriesCnt = 1 // reset
@@ -49,4 +55,46 @@ func main() {
 	fmt.Println("known range idx's :")
 	fmt.Printf("%v\n", knownrangeidxs)
 
+	// Print the result :
+	for x := 0; x < len(iArr); x++ {
+		if contains(knownrangeidxs, x) == false {
+			resultString += strconv.Itoa(x)
+			resultString += ","
+		} else {
+			isStartOfRange := contains(rangeStartIdxs, x)
+			isEndOfRange := contains(rangeEndIdxs, x)
+
+			if isStartOfRange {
+				resultString += strconv.Itoa(x) + "-"
+				//fmt.Printf("idx \n%d (%d) is the start of a range\n", x, iArr[x])
+			} else if isEndOfRange {
+				resultString += strconv.Itoa(x) + ","
+			} else {
+				// do nothing if end between
+			}
+
+			/*
+				if contains(knownrangeidxs, x) {
+					fmt.Printf("idx %d (%d) is in a known range\n", x, iArr[x])
+				}
+
+				if contains(rangeEndIdxs, x) {
+					fmt.Printf("idx %d (%d) is the end of a range\n", x, iArr[x])
+					resultString += strconv.Itoa(x) + ","
+				}*/
+		}
+
+	}
+
+	fmt.Println("Result : " + resultString)
+
+}
+
+func contains(s []int, e int) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }
