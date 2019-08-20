@@ -58,30 +58,25 @@ func main() {
 	// Print the result :
 	for x := 0; x < len(iArr); x++ {
 		if contains(knownrangeidxs, x) == false {
-			resultString += strconv.Itoa(x)
-			resultString += ","
+			resultString += strconv.Itoa(iArr[x])
+			if x < len(iArr)-1 {
+				resultString += ","
+			}
+
 		} else {
 			isStartOfRange := contains(rangeStartIdxs, x)
 			isEndOfRange := contains(rangeEndIdxs, x)
 
 			if isStartOfRange {
-				resultString += strconv.Itoa(x) + "-"
-				//fmt.Printf("idx \n%d (%d) is the start of a range\n", x, iArr[x])
+				resultString += strconv.Itoa(iArr[x]) + "-"
 			} else if isEndOfRange {
-				resultString += strconv.Itoa(x) + ","
+				resultString += strconv.Itoa(iArr[x])
+				if x < len(iArr)-1 {
+					resultString += ","
+				}
 			} else {
 				// do nothing if end between
 			}
-
-			/*
-				if contains(knownrangeidxs, x) {
-					fmt.Printf("idx %d (%d) is in a known range\n", x, iArr[x])
-				}
-
-				if contains(rangeEndIdxs, x) {
-					fmt.Printf("idx %d (%d) is the end of a range\n", x, iArr[x])
-					resultString += strconv.Itoa(x) + ","
-				}*/
 		}
 
 	}
