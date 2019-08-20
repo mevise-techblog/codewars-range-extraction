@@ -6,7 +6,12 @@ import (
 )
 
 func main() {
-	iArr := []int{1, 4, 6, 7, 8, 10, 12, 13, 18, 19, 20, 100, 101, 7, 19, 20, 21, 1, 2, 3, 4, 5, 6}
+	iArr := []int{-6, -3, -2, -1, 0, 1, 3, 4, 5, 7, 8, 9, 10, 11, 14, 15, 17, 18, 19, 20}
+	//iArr := []int{1, 4, 6, 7, 8, 10, 12, 13, 18, 19, 20, 100, 101, 7, 19, 20, 21, 1, 2, 3, 4, 5, 6}
+	Solution(iArr)
+}
+
+func Solution(iArr []int) string {
 	knownrangeidxs := []int{} // index positions in iArr that are part of a known range group
 	rangeStartIdxs := []int{}
 	rangeEndIdxs := []int{}
@@ -82,6 +87,7 @@ func main() {
 	}
 
 	fmt.Println("Result : " + resultString)
+	return resultString
 
 }
 
